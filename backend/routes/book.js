@@ -28,18 +28,14 @@ router.post("/add-book", authenticateToken, async (req, res) => {
 });
 
 // Update book --admin
-router.put("/update-book", authenticateToken, async (req, res) => {
+router.put("/update-book/:id", authenticateToken, async (req, res) => {
   try {
-    const { bookId } = req.headers;
-    await Book.findByIdAndUpdate(bookId, {
-      url: req.body.url,
-      title: req.body.title,
-      author: req.body.author,
-      price: req.body.price,
-      desc: req.body.desc,
-      language: req.body.language,
-    });
-    res.status(200).json({ message: "Book updated successfully", success: true });
+    const { id } = req.params;
+    const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedBook) {
+      return res.status(404).json({ message: "Book not found", success: false });
+    }
+    res.status(200).json({ message: "Book updated successfully", success: true, book: updatedBook });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred", success: false });
@@ -47,10 +43,13 @@ router.put("/update-book", authenticateToken, async (req, res) => {
 });
 
 // Delete book --admin
-router.delete("/delete-book", authenticateToken, async (req, res) => {
+router.delete("/delete-book/:id", authenticateToken, async (req, res) => {
   try {
-    const { bookId } = req.headers;
-    await Book.findByIdAndDelete(bookId);
+    const { id } = req.params;
+    const deletedBook = await Book.findByIdAndDelete(id);
+    if (!deletedBook) {
+      return res.status(404).json({ message: "Book not found", success: false });
+    }
     res.status(200).json({ message: "Book deleted successfully", success: true });
   } catch (error) {
     console.error(error);
