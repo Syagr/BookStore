@@ -17,6 +17,7 @@ const Navbar = () => {
 
   // Filter links based on user role
   const filteredLinks = links.filter(link => {
+    if (!isLoggedIn && link.name === 'Profile') return false;
     if (isLoggedIn) {
       if (role === 'user' && link.name === 'Admin Profile') return false;
       if (role === 'admin' && (link.name === 'Profile' || link.name === 'Cart')) return false;

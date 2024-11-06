@@ -64,7 +64,6 @@ const UserOrderHistory = () => {
                 <div className="mb-2">
                   <h3 className="text-xl font-bold">Order ID: {order._id}</h3>
                 </div>
-                <div className="text-gray-700 mb-2">Total: ${order.total}</div>
                 <div className="text-gray-700 mb-2">Status: 
                   <span className={
                     order.status === 'Order Placed' ? 'text-yellow-500' :
